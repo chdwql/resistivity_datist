@@ -45,29 +45,8 @@ def plot_obs(df, title='', filename='myfig.png'):
 
 
 startdate = (dt.datetime.today() + dt.timedelta(-1 * 365 *5)).strftime('%Y%m%d')
-startdate = '20180101'
 enddate = dt.datetime.today().strftime('%Y%m%d')
-stationname = '新沂'
-
-# params = urllib.parse.urlencode({'database': 'BAIJIATUAN',
-#                                 'stationname': stationname,
-#                                 'startdate': startdate,
-#                                 'enddate': enddate,
-#                                 'methodname': '地电阻率',
-#                                 'sampling': '小时值',
-#                                 'basetype': '预处理库',
-#                                 'itemname': '直流单装置地电阻率观测东西向',
-#                                 'piontid': '3',
-#                                 'returntype': 'false'})
-# url = f'http://10.2.102.181:8888/resistivity_avam?{params}'
-# df = pd.read_json(url, orient='split')
-# df.index.name = '日期'
-# df1 = df['OBSVALUE']
-# df2 = df[['residual', 'trend']]
-# df3 = df[['relative_range', 'annual_1', 'annual_2', 'std_1', 'std_2']]
-# plot_obs(df1, filename='新沂地电阻率东西向—3.png')
-# plot_obs(df2, filename='新沂地电阻率东西向残差—3.png')
-# plot_obs(df3, filename='新沂地电阻率东西向相对变化幅度—3.png')
+stationname = '马陵山'
 
 params = urllib.parse.urlencode({'database': 'BAIJIATUAN',
                                 'stationname': stationname,
@@ -76,36 +55,34 @@ params = urllib.parse.urlencode({'database': 'BAIJIATUAN',
                                 'methodname': '地电阻率',
                                 'sampling': '小时值',
                                 'basetype': '预处理库',
-                                'itemname': '直流单装置地电阻率观测北南向',
-                                'pointid': '9',
+                                'itemname': '直流单装置地电阻率观测东西向',
                                 'returntype': 'false'})
 url = f'http://10.2.102.181:8888/resistivity_avam?{params}'
-# url = f'http://10.37.187.192:8888/resistivity_avam?{params}'
 df = pd.read_json(url, orient='split')
 df.index.name = '日期'
 df1 = df['OBSVALUE']
 df2 = df[['residual', 'trend']]
 df3 = df[['relative_range', 'annual_1', 'annual_2', 'std_1', 'std_2']]
-plot_obs(df1, filename='新沂地电阻率南北向—9.png')
-plot_obs(df2, filename='新沂地电阻率南北向残差—9.png')
-plot_obs(df3, filename='新沂地电阻率南北向相对变化幅度—9.png')
+plot_obs(df1, filename='马陵山地电阻率东西向.png')
+plot_obs(df2, filename='马陵山地电阻率东西向残差.png')
+plot_obs(df3, filename='马陵山地电阻率东西向相对变化幅度.png')
 
-params = urllib.parse.urlencode({'database': 'BAIJIATUAN',
-                                'stationname': stationname,
-                                'startdate': startdate,
-                                'enddate': enddate,
-                                'methodname': '地电阻率',
-                                'sampling': '小时值',
-                                'basetype': '预处理库',
-                                'itemname': '直流单装置地电阻率观测北南向',
-                                'pointid': '3',
-                                'returntype': 'false'})
+params = urllib.parse.urlencode({'database': 'BAIJIATUAN',  # 数据库名称
+                                'stationname': stationname, # 台站名称
+                                'startdate': startdate,     # 起始日期
+                                'enddate': enddate,         # 结束日期
+                                'methodname': '地电阻率',   # 方法名称
+                                'sampling': '小时值',       # 采样率
+                                'basetype': '预处理库',     # 数据类型
+                                'itemname': '直流单装置地电阻率观测北南向', # 测向名称
+                                'gaps': '20190504 20191028', # 缺数区间
+                                'returntype': 'false'})      # 结果返回类型True为Json格式图片，False为DataFrame数据表
 url = f'http://10.2.102.181:8888/resistivity_avam?{params}'
 df = pd.read_json(url, orient='split')
 df.index.name = '日期'
 df1 = df['OBSVALUE']
 df2 = df[['residual', 'trend']]
 df3 = df[['relative_range', 'annual_1', 'annual_2', 'std_1', 'std_2']]
-plot_obs(df1, filename='新沂地电阻率南北向—3.png')
-plot_obs(df2, filename='新沂地电阻率南北向残差—3.png')
-plot_obs(df3, filename='新沂地电阻率南北向相对变化幅度—3.png')
+plot_obs(df1, filename='马陵山地电阻率南北向.png')
+plot_obs(df2, filename='马陵山地电阻率南北向残差.png')
+plot_obs(df3, filename='马陵山地电阻率南北向相对变化幅度.png')
