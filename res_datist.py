@@ -53,35 +53,44 @@ def plot_figure(df, filename='myfig.png', figsize=(8, 8)):
         os.makedirs('figures')
 
     fig.savefig(f'./figures/{filename}', dpi=300, bbox_inches='tight')
+    plt.close()
 
 
-def fetch_resistivity_data(stationname, filename):
+def fetch_resistivity_data(stationname, itemname, pointid='', filename='fig.png'):
     startdate = (dt.datetime.today() + dt.timedelta(-1 * 365 * 5)).strftime('%Y%m%d')
     enddate = dt.datetime.today().strftime('%Y%m%d')
 
-    params = urllib.parse.urlencode({'database': 'BAIJIATUAN',
+    params = urllib.parse.urlencode({'database': 'China_MAG',
                                     'stationname': stationname,
                                     'startdate': startdate,
                                     'enddate': enddate,
                                     'methodname': '地电阻率',
-                                    'sampling': '小时值',
+                                    'sampling': '日均值',
                                     'basetype': '预处理库',
-                                    'itemname': '直流单装置地电阻率观测东西向',
-                                    'pointid': '',
+                                    'itemname': itemname,
+                                    'pointid': pointid,
                                     'returntype': 'false'})
-    url = f'http://10.2.102.181:8888/resistivity_avam?{params}'
+    url = f'http://10.37.174.123:8888/resistivity_avam?{params}'
 
     df = pd.read_json(url, orient='split')
     df.index.name = '日期'
+    # df.tz_localize(None).to_excel('1.xlsx')
 
     plot_figure(df, filename)
 
 def get_plot():
-    "执行代码"
+
     configure_matplotlib()
-    stationname = '马陵山'
-    filename = '马陵山地电阻率东西向.png'
-    fetch_resistivity_data(stationname, filename)
+    stations = pd.read_csv('./docs/huabei.txt', sep=' ', header=0)
+    # stations = stations[0:10]
+    for index, station in stations.iterrows():
+        try:
+            filename = f"{station['name']}{station['item']}.png"
+            print(filename)
+            fetch_resistivity_data(station['name'], station['item'], filename=filename, pointid=station['pid'])
+        except Exception as e:
+                print(f"Error {filename}: {e}")
+    return None
 
 if __name__ == '__main__':
     get_plot()
