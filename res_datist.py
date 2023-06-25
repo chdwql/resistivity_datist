@@ -57,7 +57,7 @@ def plot_figure(df, filename='myfig.png', figsize=(8, 8)):
 
 
 def fetch_resistivity_data(stationname, itemname, pointid='', filename='fig.png'):
-    startdate = (dt.datetime.today() + dt.timedelta(-1 * 365 * 5)).strftime('%Y%m%d')
+    startdate = (dt.datetime.today() + dt.timedelta(-1 * 365 * 3)).strftime('%Y%m%d')
     enddate = dt.datetime.today().strftime('%Y%m%d')
 
     params = urllib.parse.urlencode({'database': 'China_MAG',
@@ -65,7 +65,7 @@ def fetch_resistivity_data(stationname, itemname, pointid='', filename='fig.png'
                                     'startdate': startdate,
                                     'enddate': enddate,
                                     'methodname': '地电阻率',
-                                    'sampling': '日均值',
+                                    'sampling': '小时值',
                                     'basetype': '预处理库',
                                     'itemname': itemname,
                                     'pointid': pointid,
@@ -74,7 +74,6 @@ def fetch_resistivity_data(stationname, itemname, pointid='', filename='fig.png'
 
     df = pd.read_json(url, orient='split')
     df.index.name = '日期'
-    # df.tz_localize(None).to_excel('1.xlsx')
 
     plot_figure(df, filename)
 
@@ -86,7 +85,7 @@ def get_plot():
     for index, station in stations.iterrows():
         try:
             filename = f"{station['name']}{station['item']}.png"
-            print(filename)
+            # print(filename)
             fetch_resistivity_data(station['name'], station['item'], filename=filename, pointid=station['pid'])
         except Exception as e:
                 print(f"Error {filename}: {e}")
